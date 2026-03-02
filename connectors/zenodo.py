@@ -1,7 +1,8 @@
 from __future__ import annotations
 from typing import Any, Dict, Iterable, List, Optional, Tuple
 import requests
-
+import time
+from requests import Response
 from core.config import QDA_EXTENSIONS
 
 ZENODO_API = "https://zenodo.org/api/records"
@@ -27,7 +28,7 @@ def search_records_with_qda(
     params = {"q": query, "size": size, "page": 1}
 
     for _ in range(max_pages):
-        resp = requests.get(ZENODO_API, headers=headers, params=params, timeout=30)
+        resp = _get_with_backoff(ZENODO_API, headers=headers, params=params, timeout=30)
         resp.raise_for_status()
         data = resp.json()
         hits = data.get("hits", {}).get("hits", [])
@@ -84,3 +85,32 @@ def extract_job(record: Dict[str, Any]) -> Dict[str, Any]:
         "qda_filename": qda_filename,
         "all_files": all_files,
     }
+
+def _get_with_backoff(url: str, headers: dict, params: dict, timeout: int = 30, max_retries: int = 8) -> Response:
+    """
+    Handles Zenodo 429 rate limits using exponential backoff + Retry-After if provided.
+    """
+    sleep_s = 1.0
+    for attempt in range(1, max_retries + 1):
+        resp = requests.get(url, headers=headers, params=params, timeout=timeout)
+
+        if resp.status_code != 429:
+            return resp
+
+        # 429: respect Retry-After header if present, otherwise exponential backoff
+        retry_after = resp.headers.get("Retry-After")
+        if retry_after:
+            try:
+                wait = float(retry_after)
+            except ValueError:
+                wait = sleep_s
+        else:
+            wait = sleep_s
+
+        print(f"[RATE] 429 Too Many Requests. Sleeping {wait:.1f}s (attempt {attempt}/{max_retries})...")
+        time.sleep(wait)
+        sleep_s = min(sleep_s * 2, 60)  # cap at 60s
+
+    # If still failing, raise for status
+    resp.raise_for_status()
+    return resp

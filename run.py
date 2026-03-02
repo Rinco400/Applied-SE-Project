@@ -1,9 +1,10 @@
 from __future__ import annotations
 import argparse
+import time
 import datetime as dt
 
 from core.config import SETTINGS
-from core.db import init_db, insert_acquisition
+from core.db import init_db, insert_acquisition, exists_qda_url
 from core.folder_manager import ensure_dataset_dir
 from core.downloader import download_file
 
@@ -18,6 +19,14 @@ def run_zenodo(max_pages: int, query: str) -> None:
     for rec in search_records_with_qda(SETTINGS.user_agent, query=query, max_pages=max_pages):
         job = extract_job(rec)
 
+        if not job["qda_url"]:
+            continue
+
+        if exists_qda_url(SETTINGS.db_path, job["qda_url"]):
+            print(f"[SKIP] Already have: {job['dataset_slug']}")
+            continue
+    
+
         dataset_dir = ensure_dataset_dir(SETTINGS.downloads_root, "zenodo", job["dataset_slug"])
 
         # Download all files (QDA + associated)
@@ -31,7 +40,7 @@ def run_zenodo(max_pages: int, query: str) -> None:
         # Record SQLite row (required fields + optional metadata)
         row = {
             "qda_url": job["qda_url"],
-            "downloaded_at": dt.datetime.utcnow().isoformat(timespec="seconds") + "Z",
+            "downloaded_at": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
             "local_dir": str(dataset_dir),
             "qda_filename": job["qda_filename"],
             "repository": "zenodo",
