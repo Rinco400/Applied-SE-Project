@@ -3,12 +3,41 @@ from pathlib import Path
 
 # Keep evolving this list as you discover real formats in the wild.
 QDA_EXTENSIONS = {
-    ".qdpx",   # REFI / QDPX
-    ".nvp",    # NVivo project
-    ".nvpx",   # NVivo exchange (sometimes)
-    ".atlproj",  # ATLAS.ti project
-    ".mx",     # MAXQDA (some variants)
-    ".mxa",    # MAXQDA archive (sometimes)
+".qdpx",
+".qdc",
+".nvp",
+".nvpx",
+".atlasproj",
+".hpr7",
+".ppj",
+".pprj",
+".qlt",
+".f4p",
+".qpd",
+".mqda",
+".mqbac",
+".mqtc",
+".mqex",
+".mqmtr",
+".mx24",
+".mx24bac",
+".mc24",
+".mex24",
+".mx22",
+".mx20",
+".mx18",
+".mx12",
+".mx11",
+".mx5",
+".mx4",
+".mx3",
+".mx2",
+".m2k",
+".loa",
+".sea",
+".mtr",
+".mod",
+".mex22"
 }
 
 @dataclass(frozen=True)
