@@ -321,27 +321,29 @@ Solution:
 
 ---
 
-## 📂 Project Structure
+## 📁 Project Structure
+
+```text
 Applied-SE-Project/
 │
 ├── connectors/
-│ ├── dataverse_no_pipeline.py # DataverseNO API pipeline
-│ └── icpsr_pipeline.py # ICPSR scraping pipeline
+│   ├── dataverse_no_pipeline.py   # DataverseNO API pipeline
+│   └── icpsr_pipeline.py          # ICPSR scraping pipeline
 │
 ├── core/
-│ ├── db.py # SQLite database handling
-│ ├── downloader.py # File download logic
-│ └── folder_manager.py # Folder utilities
+│   ├── db.py                      # SQLite database handling
+│   ├── downloader.py              # File download logic
+│   └── folder_manager.py          # Folder utilities
 │
-├── my_downloads/ # Downloaded datasets (excluded from Git)
-│ ├── dataverse_no/
-│ └── icpsr/
+├── my_downloads/                  # Downloaded datasets (excluded from Git)
+│   ├── dataverse_no/
+│   └── icpsr/
 │
-├── metadata.db # SQLite database (excluded from Git)
-├── run.py # Main entry point
-├── requirements.txt # Dependencies
-├── README.md # Project documentation
-└── .gitignore # Ignore large files & environments
+├── metadata.db                   # SQLite database (excluded from Git)
+├── run.py                        # Main entry point
+├── requirements.txt              # Dependencies
+├── README.md                     # Project documentation
+└── .gitignore                    # Ignore large files & environments
 
 
 ---
