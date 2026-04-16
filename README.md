@@ -361,21 +361,39 @@ python run.py --repo all
 - Data acquisition pipeline works successfully
 - Large number of datasets processed
 - Significant number of files collected
-- No QDA files found → confirms research gap
+- No QDA files found → confirms research gap  
 
 This validates the importance of QDArchive.
 
-```
-## 🔗 Submission
-- SQLite DB: metadata.db
-- Source code: GitHub repository
-- Downloaded data: local storage
-```
-##✅ Final Remark
+---
+
+## 📎 Submission
+
+- **SQLite Database:**  
+  [Download metadata.db](https://github.com/Rinco400/Applied-SE-Project/raw/main/metadata.db)
+
+- **Source Code:**  
+  [GitHub Repository](https://github.com/Rinco400/Applied-SE-Project)
+
+- **Downloaded Data:**  
+  Stored locally (~144 GB total size)  
+  Due to large size, full dataset is not included in GitHub.
+
+- **FAUbox Data Access:**  
+  [Download Dataset (FAUbox)](https://faubox.rrze.uni-erlangen.de/getlink/fiknN6PrhXTQzzuXBSRj9/)
+
+- **Access Note:**  
+  Metadata database contains complete records of all processed datasets,  
+  including file URLs, metadata, and download status.
+
+---
+
+## ✅ Final Remark
+
 This project successfully demonstrates:
 
-✔ automated data acquisition
-✔ real-world data challenges
-✔ robust engineering solutions
+✔ Automated data acquisition  
+✔ Real-world data challenges  
+✔ Robust engineering solutions
 
 
