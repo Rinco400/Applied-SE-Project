@@ -355,25 +355,27 @@ python run.py --repo dataverse_no
 python run.py --repo icpsr
 python run.py --repo all
 
-##📌 Conclusion
-Data acquisition pipeline works successfully
-Large number of datasets processed
-Significant number of files collected
-No QDA files found → confirms research gap
+```
+
+## 📌 Conclusion
+- Data acquisition pipeline works successfully
+- Large number of datasets processed
+- Significant number of files collected
+- No QDA files found → confirms research gap
 
 This validates the importance of QDArchive.
 
-##🔗 Submission
-SQLite DB: metadata.db
-Source code: GitHub repository
-Downloaded data: local storage
+```
+## 🔗 Submission
+- SQLite DB: metadata.db
+- Source code: GitHub repository
+- Downloaded data: local storage
+```
 ##✅ Final Remark
-
 This project successfully demonstrates:
 
 ✔ automated data acquisition
 ✔ real-world data challenges
 ✔ robust engineering solutions
 
-and provides a strong foundation for Part 2: Data Classification.
 
