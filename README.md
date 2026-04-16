@@ -348,14 +348,14 @@ Applied-SE-Project/
 
 ---
 
-# ▶️ Usage
+## ▶️ Usage
 
 ```bash
 python run.py --repo dataverse_no
 python run.py --repo icpsr
 python run.py --repo all
 
-#📌 Conclusion
+##📌 Conclusion
 Data acquisition pipeline works successfully
 Large number of datasets processed
 Significant number of files collected
@@ -363,11 +363,11 @@ No QDA files found → confirms research gap
 
 This validates the importance of QDArchive.
 
-#🔗 Submission
+##🔗 Submission
 SQLite DB: metadata.db
 Source code: GitHub repository
 Downloaded data: local storage
-#✅ Final Remark
+##✅ Final Remark
 
 This project successfully demonstrates:
 
