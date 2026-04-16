@@ -345,6 +345,8 @@ Applied-SE-Project/
 ├── README.md                     # Project documentation
 └── .gitignore                    # Ignore large files & environments
 
+---
+
 
 ## ▶️ Usage
 
