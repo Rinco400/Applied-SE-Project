@@ -346,8 +346,6 @@ Applied-SE-Project/
 └── .gitignore                    # Ignore large files & environments
 
 
----
-
 ## ▶️ Usage
 
 ```bash
