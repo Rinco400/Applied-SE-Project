@@ -1,3 +1,7 @@
+![License](https://img.shields.io/badge/license-MIT-green)
+![Status](https://img.shields.io/badge/status-validated-brightgreen)
+![Validation](https://img.shields.io/badge/SQ26-10%2F10%20PASS-success)
+
 # QDArchive — Part 1: Data Acquisition
 ---
 
