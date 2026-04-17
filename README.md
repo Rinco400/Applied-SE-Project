@@ -206,6 +206,19 @@ Stores failed downloads and reasons
 
 ---
 
+## Validation
+
+The submission database file is:
+23071082-seeding.db
+
+This database was validated using the official SQ26 grading tool:
+https://github.com/riehlegroup/sq26-grading
+
+Validation result:
+10 passed, 0 warnings, 0 errors
+
+The database fully complies with all required schema and value constraints and is ready for submission.
+
 # ⚠️ Technical Challenges (DATA)
 
 ## 1. No QDA files available
