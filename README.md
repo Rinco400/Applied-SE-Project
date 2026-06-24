@@ -344,24 +344,46 @@ Solution:
 Applied-SE-Project/
 │
 ├── connectors/
-│   ├── dataverse_no_pipeline.py   # DataverseNO API pipeline
-│   └── icpsr_pipeline.py          # ICPSR scraping pipeline
+│   ├── __init__.py
+│   ├── dataverse_no_pipeline.py        # DataverseNO acquisition pipeline
+│   └── icpsr_pipeline.py               # ICPSR acquisition pipeline
 │
 ├── core/
-│   ├── db.py                      # SQLite database handling
-│   ├── downloader.py              # File download logic
-│   └── folder_manager.py          # Folder utilities
+│   ├── __init__.py
+│   ├── config.py                       # Project configuration
+│   ├── db.py                           # SQLite database operations
+│   ├── downloader.py                   # File download logic
+│   └── folder_manager.py               # Download-folder management
 │
-├── my_downloads/                  # Downloaded datasets (excluded from Git)
+├── my_downloads/                       # Downloaded datasets; excluded from Git
 │   ├── dataverse_no/
 │   └── icpsr/
 │
-├── metadata.db                   # SQLite database (excluded from Git)
-├── run.py                        # Main entry point
-├── requirements.txt              # Dependencies
-├── README.md                     # Project documentation
-└── .gitignore                    # Ignore large files & environments
-
+├── part2/
+│   ├── outputs/
+│   │   ├── 23071082-classification-report.pdf
+│   │   ├── 23071082-classification-results.xlsx
+│   │   └── classification_audit.txt
+│   │
+│   ├── audit_classification.py          # Validates and summarizes Part 2 results
+│   ├── classify_isic.py                 # ISIC Rev. 5 section/division classifier
+│   ├── classify_project_types.py        # QDA/QD/OTHER/NOT_A project classifier
+│   ├── generate_outputs.py              # Generates final XLSX and PDF report
+│   ├── isic_rev5_structure.csv          # Official ISIC Rev. 5 taxonomy structure
+│   └── prepare_classification_db.py     # Creates Part 2 DB from Part 1 DB
+│
+├── sq26-grading/                        # Official Part 1 validation tool
+│
+├── 23071082-seeding.db                  # Validated Part 1 submission database
+├── 23071082-sq26-classification.db      # Part 2 classification database
+├── convert_to_submission.py             # Converts metadata DB into Part 1 schema
+├── icpsr_seed_urls.txt                  # ICPSR fallback seed-study URLs
+├── LICENSE                              # Repository code licence
+├── metadata.db                          # Working acquisition database; excluded from Git
+├── README.md                            # Project documentation
+├── requirements.txt                     # Python dependencies
+├── run.py                               # Main Part 1 acquisition entry point
+└── .gitignore                           # Excludes environments, raw data, working DB
 ```
 
 
@@ -414,3 +436,282 @@ This project successfully demonstrates:
 ✔ Robust engineering solutions
 
 
+## Seeding QDArchive - Part 2 Classification
+
+**Status:** Classification  
+**Student ID:** `23071082`
+
+---
+
+## Overview
+
+Part 2 classifies the projects acquired during Part 1 of the Seeding QDArchive project.
+
+The classification workflow uses:
+
+- Project metadata
+- File names and extensions
+- ZIP archive member inspection
+- Limited content extraction from parsable files
+- ISIC Rev. 5 section and division categories
+
+The work is descriptive. No labelled ground-truth dataset was provided, so the classification is not evaluated with accuracy metrics.
+
+---
+
+## Input Database
+
+Part 2 uses the validated Part 1 database:
+
+```text
+23071082-seeding.db
+```
+
+A separate classification database is created so that the Part 1 submission database remains unchanged:
+
+```text
+23071082-sq26-classification.db
+```
+
+---
+
+## Project Type Classification
+
+Each project is assigned one of the following project types:
+
+```text
+QDA_PROJECT
+QD_PROJECT
+OTHER_PROJECT
+NOT_A_PROJECT
+```
+
+The classification follows this cascade:
+
+| Project Type | Classification Rule |
+|---|---|
+| `QDA_PROJECT` | At least one recognised QDA software project file is available. |
+| `QD_PROJECT` | No QDA project file is found, but primary qualitative-data files are available. |
+| `OTHER_PROJECT` | No QDA or primary qualitative-data file is found, but valid structured-data files are available. |
+| `NOT_A_PROJECT` | No reliable evidence can be derived from available file information. |
+
+### Recognised QDA File Types
+
+Examples include:
+
+```text
+.qdpx, .qda, .qde, .qdas
+.nvp, .nvpx
+.atlproj, .hpr7, .hpr6
+.mx, .maxqda, .maxqdaproject
+```
+
+### Primary Qualitative Data File Types
+
+Examples include:
+
+```text
+.txt, .rtf, .doc, .docx, .pdf, .md
+.mp3, .wav, .m4a
+.mp4, .mov, .avi
+.jpg, .jpeg, .png
+.vtt, .srt
+```
+
+### Valid Structured Data File Types
+
+Examples include:
+
+```text
+.csv, .tsv, .xlsx, .xls
+.json, .xml, .yaml
+.sav, .dta, .rds
+.parquet, .geojson
+```
+
+ZIP archives are inspected through their member lists without fully extracting every archive.
+
+---
+
+## ISIC Rev. 5 Classification
+
+Eligible `QDA_PROJECT` and `QD_PROJECT` records are classified using ISIC Rev. 5.
+
+| Field | Meaning |
+|---|---|
+| `primary_class` | ISIC section |
+| `secondary_class` | ISIC division |
+
+The classifier uses transparent keyword-based rules from:
+
+- Project title
+- Project description
+- Project keywords
+- File names
+- Sampled content from parsable files
+
+Parsable files include:
+
+```text
+.txt, .md, .csv, .tsv, .json, .xml
+.html, .rtf, .docx, .pdf
+```
+
+For performance control, a maximum of four parsable primary-data files per project is sampled.
+
+---
+
+## Classification Results
+
+### Overall Statistics
+
+| Measure | Result |
+|---|---:|
+| Canonical projects | 133 |
+| File records | 67,169 |
+| Duplicate mappings | 0 |
+| `QDA_PROJECT` | 0 |
+| `QD_PROJECT` | 75 |
+| `OTHER_PROJECT` | 3 |
+| `NOT_A_PROJECT` | 55 |
+| Projects with ISIC classification | 75 |
+| Primary files with ISIC classification | 67,021 |
+| Files with extracted content | 261 |
+
+### Project Types by Repository
+
+| Repository | `QDA_PROJECT` | `QD_PROJECT` | `OTHER_PROJECT` | `NOT_A_PROJECT` |
+|---|---:|---:|---:|---:|
+| DataverseNO | 0 | 74 | 0 | 20 |
+| ICPSR | 0 | 1 | 3 | 35 |
+
+### Dominant ISIC Divisions
+
+| Repository | Dominant ISIC Division | Classified Projects |
+|---|---|---:|
+| DataverseNO | N72 - Scientific research and development | 67 |
+| ICPSR | N72 - Scientific research and development | 1 |
+
+The dominant category reflects the acquired dataset and search coverage. It should not be interpreted as the general distribution of qualitative research worldwide.
+
+---
+
+## Deliverables
+
+The Part 2 workflow produces:
+
+```text
+23071082-sq26-classification.db
+part2/outputs/23071082-classification-results.xlsx
+part2/outputs/23071082-classification-report.pdf
+part2/outputs/classification_audit.txt
+```
+
+### Required XLSX Columns
+
+```text
+repository_id
+project_type
+project_title
+primary_class
+secondary_class
+no_project_files
+```
+
+### PDF Report Contents
+
+The generated PDF report includes:
+
+- Project-type distribution by repository
+- Repository-specific primary-class histograms
+- Full ISIC class names on chart labels
+- Count values displayed on chart bars
+- Rank-ordered primary-class tables
+- Comments on repository findings
+- Technical data challenges
+- Conclusion
+
+---
+
+## Technical Data Challenges
+
+### 1. No Confirmed QDA Project Files
+
+No QDPX, NVivo, ATLAS.ti, MAXQDA, or equivalent QDA software project files were identified among the collected canonical projects.
+
+### 2. Generic File Extensions Are Ambiguous
+
+Formats such as TXT, PDF, CSV, XLSX, and ZIP do not prove that a project contains qualitative research material. They may represent interview transcripts, sensor logs, scientific measurements, technical documentation, or software output.
+
+### 3. Incomplete Downloadable Evidence
+
+Some projects had no successfully downloaded files that could support project-type derivation. These records were classified as `NOT_A_PROJECT`.
+
+### 4. Archive and Compound Datasets
+
+ZIP archives can contain mixed material such as primary data, documentation, structured files, and technical outputs. File-name and extension inspection cannot always determine the semantic meaning of every archive member.
+
+### 5. Uneven Repository Coverage
+
+DataverseNO provided most `QD_PROJECT` records, while ICPSR contributed fewer accessible primary-data projects in this acquisition run. Repository-level statistics should therefore be interpreted carefully.
+
+### 6. File-Volume Imbalance
+
+A few projects contain thousands of similar files. Therefore, the report uses project-level classification distributions rather than file-level distributions, preventing a single large project from dominating the statistics.
+
+---
+
+## Reproducibility
+
+Install required dependencies:
+
+```powershell
+python -m pip install pypdf python-docx pandas xlsxwriter matplotlib
+```
+
+Run the Part 2 workflow in this order:
+
+```powershell
+python .\part2\prepare_classification_db.py
+python .\part2\classify_project_types.py
+python .\part2\classify_isic.py
+python .\part2\audit_classification.py
+python .\part2\generate_outputs.py
+```
+
+> **Important:** `prepare_classification_db.py` creates a new classification database. Running it again resets the Part 2 database and requires all later scripts to be run again.
+
+---
+
+## Part 2 Project Structure
+
+```text
+part2/
+├── outputs/
+│   ├── 23071082-classification-report.pdf
+│   ├── 23071082-classification-results.xlsx
+│   └── classification_audit.txt
+│
+├── audit_classification.py
+├── classify_isic.py
+├── classify_project_types.py
+├── generate_outputs.py
+├── isic_rev5_structure.csv
+└── prepare_classification_db.py
+```
+
+---
+
+## Final Part 2 Submission
+
+Final classification database:
+
+```text
+23071082-sq26-classification.db
+```
+
+Final Git tag:
+
+```text
+classification-results
+```

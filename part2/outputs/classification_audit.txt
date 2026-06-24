@@ -1,0 +1,71 @@
+==============================================================================
+PART 2 CLASSIFICATION AUDIT
+==============================================================================
+Total projects: 133
+Total files: 67169
+Projects with ISIC classification: 75
+Primary files with ISIC classification: 67021
+Files with extracted content: 261
+
+==============================================================================
+PROJECT TYPE DISTRIBUTION BY REPOSITORY
+==============================================================================
+DataverseNO | NOT_A_PROJECT: 20
+DataverseNO | QD_PROJECT: 74
+ICPSR | NOT_A_PROJECT: 35
+ICPSR | OTHER_PROJECT: 3
+ICPSR | QD_PROJECT: 1
+
+==============================================================================
+PROJECT-LEVEL PRIMARY CLASSES BY REPOSITORY
+==============================================================================
+
+DataverseNO
+    67 | N — Professional, scientific and technical activities
+     3 | Q — Education
+     2 | P — Public administration and defence; compulsory social security
+     1 | J — Publishing, broadcasting, and content production and distribution activities
+     1 | K — Telecommunications, computer programming, consultancy, computing infrastructure, and other information service activities
+
+ICPSR
+     1 | N — Professional, scientific and technical activities
+
+==============================================================================
+PROJECT-LEVEL DIVISIONS BY REPOSITORY — TOP 20
+==============================================================================
+
+DataverseNO
+    67 | N72 — Scientific research and development
+     3 | Q85 — Education
+     2 | P84 — Public administration and defence; compulsory social security
+     1 | J58 — Publishing activities
+     1 | K62 — Computer programming, consultancy and related activities
+
+ICPSR
+     1 | N72 — Scientific research and development
+
+==============================================================================
+TOP PRIMARY FILE-LEVEL DIVISIONS BY REPOSITORY
+==============================================================================
+
+DataverseNO
+   67005 | N72 — Scientific research and development
+       7 | Q85 — Education
+       5 | P84 — Public administration and defence; compulsory social security
+       1 | B05 — Mining of coal and lignite
+       1 | J58 — Publishing activities
+       1 | K62 — Computer programming, consultancy and related activities
+
+ICPSR
+       1 | N72 — Scientific research and development
+
+==============================================================================
+UNCLASSIFIED ELIGIBLE PROJECT CHECK
+==============================================================================
+Eligible projects without ISIC class: 0
+
+==============================================================================
+CONTENT EXTRACTION STATUS
+==============================================================================
+ 259 | extracted_text
+   2 | extracted_pdf
